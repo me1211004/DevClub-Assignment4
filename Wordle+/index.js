@@ -1,16 +1,58 @@
-const http = require("http");
+const http=require('http');
+const hostname='127.0.0.1';
+const port=3000;
+function myServer(req,res)
+{
+    let query1=req.url.split("q=")[1];
+    console.log(query1)
+    let query=query1
+    let answer="CIGAR"
+    let ans=""
+    if (query==null)
+      {
+          ans="undefined"
+      }
+      else 
+      {
+          for(var i=0;i<5;i++)
+               {
+                   let flag=0
+                   for(var j=0;j<5;j++)
+                      {
+                          if(query[j]==answer[i] && i==j)
+                          {
+                              flag=1;
+                              break;
+                          }
+                          if(query[j]==answer[i])
+                          {
+                              flag=2;
+                              break;
+                          }
+                      }
+                      if(flag==0)
+                      {
+                          ans+="r";
+                      }
+                      else if(flag==1)
+                      {
+                          ans+="g"
+                      }
+                      else{
+                          ans+="y";
+                      }
 
-const SECRET = "CIGAR"; // You can set any word as the secret answer
+               }
+      }
+      console.log(ans)
+      res.statusCode=200;
+      res.setHeader('Content-Type','text/plain');
+      res.end(ans)
 
-function myFunction(req, res) {
-	// console.log({req}); // You can uncomment this to see the request object
-	console.log(req.url);
-
-	const GUESS = ""; // Write logic to parse the word which the user guessed from the URL string
-	const feedback = ""; // Write logic to compare the word with the secret, and generate the feedback string
-
-	res.write(feedback);
-	res.end();
 }
-
-http.createServer(myFunction).listen(8080);
+const server=http.createServer(myServer);
+function callBack()
+{
+    console.log('Server running at  http://${hostname}:${port}/');
+}
+server.listen(port,  hostname,  callBack);
